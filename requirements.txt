@@ -1,0 +1,3 @@
+sphinx==8.2.3
+nvidia-sphinx-theme==0.0.8
+myst-parser==4.0.1
