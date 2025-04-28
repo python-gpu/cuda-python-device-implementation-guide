@@ -17,14 +17,14 @@ extensions = [
     'myst_parser'  # for markdown support
 ]
 
+master_doc = 'introduction'
 templates_path = ['_templates']
 exclude_patterns = []
 
-
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
-html_theme = "nvidia_sphinx_theme"
-html_static_path = ["_static"]
+html_theme = 'nvidia_sphinx_theme'
+html_static_path = ['_static']
 html_show_sphinx = False
 
 sys.path.insert(0, os.path.dirname(__file__))

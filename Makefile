@@ -5,7 +5,7 @@
 SPHINXOPTS    ?= -W
 SPHINXBUILD   ?= sphinx-build
 SOURCEDIR     = .
-BUILDDIR      = src
+BUILDDIR      = build
 PROJECTDIR    = $(CURDIR)/..
 
 # Put it first so that "make" without argument is like "make help".
