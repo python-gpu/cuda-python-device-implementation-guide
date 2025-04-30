@@ -16,8 +16,8 @@ Each index ``x``, ``y``, and ``z`` shall be greater than or equal to 0
 and less than ``block_dim.x``, ``block_dim.y``, and ``block_dim.z``
 respectively.
 
-``tid(ndims): Dim3Like`` Function
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``tid(ndims): Shape`` Function
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The absolute position of the thread in the grid.
 
@@ -53,8 +53,8 @@ The shape of each block of threads.
 
 The shape of the grid of blocks.
 
-``grid_size(ndims): Dim3Like`` Function
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``grid_size(ndims): Shape`` Function
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The absolute size of the grid.
 

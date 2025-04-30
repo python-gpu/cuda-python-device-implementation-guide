@@ -56,13 +56,13 @@ Frameworks shall produce an error if ``@kernel`` is invoked with any
 unsupported or unknown keyword arguments. Example: A framework could
 provide a link argument: ``@kernel(link=files)``
 
-``launch(f, *args, grid: Dim3Like, block: Dim3Like, stream: core.Stream, shared=0: int32)`` Function
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``launch(f, *args, grid: Shape, block: Shape, stream: core.Stream, shared=0: int32)`` Function
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Asynchronously executes on ``stream`` a thread grid of ``grid`` blocks
 each with ``block`` threads and ``shared`` bytes of dynamic shared
 memory, each thread of which executes ``f(args)``.
 
-f shall be a kernel function. [User Requirement]
+``f`` shall be a kernel function. [User Requirement]
 
 All of ``args`` shall be heterogeneous. [User Requirement] 
