@@ -58,32 +58,20 @@ the above values. [User Requirement]
 Atomics
 ~~~~~~~
 
-``AtomicInterface``
-^^^^^^^^^^^^^^^^^^^
-
 .. autoclass:: api.atomic_interface.AtomicInterface
    :members:
    :undoc-members:
    :special-members: __init__
-
-``Atomic``
-^^^^^^^^^^
 
 .. autoclass:: api.atomic.Atomic
    :members:
    :undoc-members:
    :special-members: __init__
 
-``AtomicRef``
-^^^^^^^^^^^^^
-
 .. autoclass:: api.atomic_ref.AtomicRef
    :members:
    :undoc-members:
    :special-members: __init__
-
-Memory Fences
-^^^^^^^^^^^^^
 
 .. autofunction:: api.atomic_interface.threadfence 
 
