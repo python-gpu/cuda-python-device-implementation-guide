@@ -13,9 +13,10 @@ This section defines:
 
 .. toctree::
    :maxdepth: 2
+   :caption: Contents:
 
-   heterogeneous_programming/constant_expressions
-   heterogeneous_programming/execution_spaces
-   heterogeneous_programming/heterogeneous_functions
-   heterogeneous_programming/heterogeneous_types
-   heterogeneous_programming/target_specialization 
+   constant_expressions
+   execution_spaces
+   heterogeneous_functions
+   heterogeneous_types
+   target_specialization 
