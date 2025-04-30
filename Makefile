@@ -4,7 +4,7 @@
 # from the environment for the first two.
 SPHINXOPTS    ?= -W
 SPHINXBUILD   ?= sphinx-build
-SOURCEDIR     = .
+SOURCEDIR     = src
 BUILDDIR      = build
 PROJECTDIR    = $(CURDIR)/..
 
