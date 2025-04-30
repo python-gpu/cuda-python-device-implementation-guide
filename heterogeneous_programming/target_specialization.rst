@@ -2,28 +2,49 @@ Target Specialization
 ---------------------
 
 +-----------------------------------+-----------------------------------+
-| ``if                              | ``#if !__CU                       |
-| target(is_host):   substatement`` | DA_ARCH__   substatement #endif`` |
-+===================================+===================================+
-| ``if ta                           | ``#if __CU                        |
-| rget(is_device):   substatement`` | DA_ARCH__   substatement #endif`` |
+| .. code-block:: py                | .. code-block:: cu                |
+|                                   |                                   |
+|    if target(is_host):            |    #if !__CUDA_ARCH__             |
+|      substatement                 |      substatement                 |
+|                                   |    #endif                         |
 +-----------------------------------+-----------------------------------+
-| ``if t                            | ``#if                             |
-| arget(is_exactly(smXX) \          |  __CUDA_ARCH__ == XX0 \  || __CUD |
-| | is_exactly(smYY) \         | is | A_ARCH__ == YY0 \  || __CUDA_ARCH |
-| _exactly(smZZ)):   substatement`` | __ == ZZ0   substatement #endif`` |
+| .. code-block:: py                | .. code-block:: cu                |
+|                                   |                                   |
+|    if target(is_device):          |    #if __CUDA_ARCH__              |
+|      substatement                 |      substatement                 |
+|                                   |    #endif                         |
 +-----------------------------------+-----------------------------------+
-| ``if target(!                     | ``#if __CUDA_ARC                  |
-| provides(smXX)):   substatement`` | H__ < XX0   substatement #endif`` |
+| .. code-block:: py                | .. code-block:: cu                |
+|                                   |                                   |
+|    if target(is_exactly(smXX)     |    #if  __CUDA_ARCH__ == XX0 \\   |
+|            | is_exactly(smYY)     |      || __CUDA_ARCH__ == YY0 \\   |
+|            | is_exactly(smZZ)):   |      || __CUDA_ARCH__ == ZZ0      |
+|      substatement                 |      substatement                 |
+|                                   |    #endif                         |
 +-----------------------------------+-----------------------------------+
-| ``if target(!provides(smXX) | is  | ``#if __CUDA_ARCH                 |
-| _exactly(smXX)):   substatement`` | __ <= XX0   substatement #endif`` |
+| .. code-block:: py                | .. code-block:: cu                |
+|                                   |                                   |
+|    if target(!provides(smXX)):    |    #if __CUDA_ARCH__ < XX0        |
+|      substatement                 |      substatement                 |
+|                                   |    #endif                         |
 +-----------------------------------+-----------------------------------+
-| ``if target(provides(smXX) & ~is  | ``#if __CUDA_ARC                  |
-| _exactly(smXX)):   substatement`` | H__ > XX0   substatement #endif`` |
+| .. code-block:: py                | .. code-block:: cu                |
+|                                   |                                   |
+|    if target(!provides(smXX)      |    #if __CUDA_ARCH__ <= XX0       |
+|            | is_exactly(smXX)):   |      substatement                 |
+|      substatement                 |    #endif                         |
 +-----------------------------------+-----------------------------------+
-| ``if target(                      | ``#if __CUDA_ARCH                 |
-| provides(smXX)):   substatement`` | __ >= XX0   substatement #endif`` |
+| .. code-block:: py                | .. code-block:: cu                |
+|                                   |                                   |
+|    if target(provides(smXX)       |    #if __CUDA_ARCH__ > XX0        |
+|            & ~is_exactly(smXX)):  |      substatement                 |
+|      substatement                 |    #endif                         |
++-----------------------------------+-----------------------------------+
+| .. code-block:: py                | .. code-block:: cu                |
+|                                   |                                   |
+|    if target(provides(smXX)):     |    #if __CUDA_ARCH__ >= XX0       |
+|      substatement                 |      substatement                 |
+|                                   |    #endif                         |
 +-----------------------------------+-----------------------------------+
 
 *Target specialization* enables the conditional use of constructs that
@@ -38,9 +59,6 @@ If the condition of an ``if`` statement:
 
 then the use of any constructs that require a certain execution space
 shall not require that execution space.
-
-Note: This facility is based on `NVC++'s ``if target``
-facility <https://docs.google.com/document/d/1BK7V_hS4-X35Ua9RzyQzRYDvXLR4Xh0T45Ke7uMsAsY/edit?tab=t.0#bookmark=id.41mghml>`__.
 
 ``target(desc: ConstExpr[TargetDescription]) -> bool`` Function
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
