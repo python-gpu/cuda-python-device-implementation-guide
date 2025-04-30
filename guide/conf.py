@@ -3,7 +3,7 @@
 import sys
 import os
 
-project = 'CUDA Python SIMT Device Implementation Guide'
+project = 'CUDA Python Device Implementation Guide'
 copyright = '2025, NVIDIA Corporation'
 author = 'NVIDIA Corporation'
 
@@ -27,4 +27,5 @@ html_theme = 'nvidia_sphinx_theme'
 html_show_sphinx = False
 
 sys.path.insert(0, os.path.dirname(__file__))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 

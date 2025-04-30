@@ -58,202 +58,34 @@ the above values. [User Requirement]
 Atomics
 ~~~~~~~
 
-``AtomicInterface`` Class
-^^^^^^^^^^^^^^^^^^^^^^^^^
+``AtomicInterface``
+^^^^^^^^^^^^^^^^^^^
 
-A class that subclasses ``AtomicInterface`` represents a scalar object
-that can be accessed atomically. ``AtomicInterface`` types are usable in
-device code.
+.. autoclass:: api.atomic_interface.AtomicInterface
+   :members:
+   :undoc-members:
+   :special-members: __init__
 
-Frameworks may define ``AtomicInterface`` as device only.
+``Atomic``
+^^^^^^^^^^
 
-In this section, *atomic's object* means the scalar object that an
-``AtomicInterface`` refers to.
+.. autoclass:: api.atomic.Atomic
+   :members:
+   :undoc-members:
+   :special-members: __init__
 
-``Atomic`` Class
-^^^^^^^^^^^^^^^^
+``AtomicRef``
+^^^^^^^^^^^^^
 
-A class that owns a scalar object that is accessed atomically.
+.. autoclass:: api.atomic_ref.AtomicRef
+   :members:
+   :undoc-members:
+   :special-members: __init__
 
-``Atomic.__init__(self, dtype)`` Function
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Memory Fences
+^^^^^^^^^^^^^
 
-Creates an ``Atomic`` object containing an object of ``dtype``.
-
-The size of the machine representation of the dtype of the atomic's
-object shall be less than or equal to 16 bytes. [User Requirement]
-
-``Atomic.dtype`` Attribute
-^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-The data type of the atomic's object.
-
-``atomic_ref(array, index) -> AtomicInterface`` Function
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Returns an object that implements the ``AtomicInterface`` and represents
-the object at ``array[index]``.
-
-Users shall preserve the lifetime of ``array`` for as long as the
-returned ``AtomicInterface`` may be used. [User Requirement]
-
-``AtomicInterface.dtype`` Attribute
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-The dtype of the atomic's object.
-
-``AtomicInterface.load(self, memory='seq_cst', scope='system')`` Function
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Atomically returns the value of the atomic's object.
-
-The size of the machine representation of the dtype of the atomic's
-object shall be less than or equal to 16 bytes. [User Requirement]
-
-``AtomicInterface.store(self, val, memory='seq_cst', scope='system')`` Function
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Atomically sets the value of the atomic's object to ``val``.
-
-The size of the machine representation of the dtype of the atomic's
-object shall be less than or equal to 16 bytes. [User Requirement]
-
-``AtomicInterface.exch(self, val, memory='seq_cst', scope='system')`` Function
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Atomically sets the value of the atomic's object to ``val``.
-
-Returns the value of the atomic's object before this operation.
-
-The size of the machine representation of the dtype of the atomic's
-object shall be less than or equal to 8 bytes. [User Requirement]
-
-``AtomicInterface.cas(self, old, val, memory='seq_cst', scope='system')`` Function
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Atomically performs ``if (this == old) this = val``, where ``this`` is
-the value of the object.
-
-Returns the value of the atomic's object before this operation.
-
-The size of the machine representation of the dtype of the atomic's
-object shall be less than or equal to 8 bytes. [User Requirement]
-
-``AtomicInterface.add(self, val, memory='seq_cst', scope='system')`` Function
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Atomically performs ``this += val``, where ``this`` is the value of the
-object.
-
-Returns the value of the atomic's object before this operation.
-
-The dtype of the atomic's object shall be ``uint32``, ``int32``,
-``uint64``, ``int64``, ``float32``, or ``float64``. [User Requirement]
-
-``AtomicInterface.sub(self, val, memory='seq_cst', scope='system')`` Function
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Atomically performs ``this -= val``, where ``this`` is the value of the
-object.
-
-Returns the value of the atomic's object before this operation.
-
-The dtype of the atomic's object shall be ``uint32``, ``int32``,
-``uint64``, ``int64``, ``float32``, or ``float64``. [User Requirement]
-
-``AtomicInterface.and_(self, val, memory='seq_cst', scope='system')`` Function
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Atomically performs ``this &= val``, where ``this`` is the value of the
-object.
-
-Returns the value of the atomic's object before this operation.
-
-The dtype of the atomic's object shall be ``uint32``, ``int32``,
-``uint64``, or ``int64``. [User Requirement]
-
-``AtomicInterface.or_(self, val, memory='seq_cst', scope='system')`` Function
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Atomically performs ``this |= val``, where ``this`` is the value of the
-object.
-
-Returns the value of the atomic's object before this operation.
-
-The dtype of the atomic's object shall be ``uint32``, ``int32``,
-``uint64``, or ``int64``. [User Requirement]
-
-``AtomicInterface.xor(self, val, memory='seq_cst', scope='system')`` Function
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Atomically performs ``this ^= val``, where ``this`` is the value of the
-object.
-
-Returns the value of the atomic's object before this operation.
-
-The dtype of the atomic's object shall be ``uint32``, ``int32``,
-``uint64``, or ``int64``. [User Requirement]
-
-``AtomicInterface.max(self, val, memory='seq_cst', scope='system')`` Function
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Atomically perform ``this = max(this, val)``, where ``this`` is the
-value of the object.
-
-Returns the value of the atomic's object before this operation.
-
-The dtype of the atomic's object shall be ``uint32``, ``int32``,
-``uint64``, ``int64``, ``float32``, or ``float64``. [User Requirement]
-
-``AtomicInterface.nanmax(self, val, memory='seq_cst', scope='system')`` Function
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Atomically perform ``this = max(this, val)``, where ``this`` is the
-value of the object.
-
-NaN is treated as a missing value. Example:
-``assert(AtomicInterface.nanmax(a, NaN) == a)``. Example:
-``a = NaN; assert(AtomicInterface.nanmax(a, n) == n)``.
-
-Returns the value of the atomic's object before this operation.
-
-The dtype of the atomic's object shall be ``uint32``, ``int32``,
-``uint64``, ``int64``, ``float32``, or ``float64``. [User Requirement]
-
-``AtomicInterface.min(self, val, memory='seq_cst', scope='system')`` Function
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Atomically perform ``this = min(this, val)``, where ``this`` is the
-value of the object.
-
-Returns the value of the atomic's object before this operation.
-
-The dtype of the atomic's object shall be ``uint32``, ``int32``,
-``uint64``, ``int64``, ``float32``, or ``float64``. [User Requirement]
-
-``AtomicInterface.nanmin(self, val, memory='seq_cst', scope='system')`` Function
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Atomically perform ``this = min(this, val)``, where ``this`` is the
-value of the object.
-
-NaN is treated as a missing value. Example:
-``assert(AtomicInterface.nanmin(a, NaN) == a)``. Example:
-``a = NaN; assert(AtomicInterface.nanmin(a, n) == n)``.
-
-Returns the value of the atomic's object before this operation.
-
-The dtype of the atomic's object shall be ``uint32``, ``int32``,
-``uint64``, ``int64``, ``float32``, or ``float64``. [User Requirement]
-
-``threadfence(memory='seq_cst', scope='system')`` Function
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Establishes the specified memory synchronization ordering of non-atomic
-and relaxed accesses.
-
-Note: This is the equivalent of CUDA C++'s ``__threadfence``,
-``__threadfence_block``, and ``__threadfence_system``.
+.. autofunction:: api.atomic_interface.threadfence 
 
 Thread Block Synchronization
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
