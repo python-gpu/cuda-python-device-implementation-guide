@@ -286,7 +286,7 @@ Returns ``True`` if ``predicate() == True`` for all threads in the
 thread block.
 
 ``syncthreads_or(pred: Callable[[], bool]) -> bool`` Function
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Synchronizes with all threads in the same thread block.
 

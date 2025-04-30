@@ -36,37 +36,27 @@ code, and when they appear in a call to an interoperable function, they
 shall have the same machine representation as the corresponding CUDA C++
 types:
 
-+-----------------------+-----------------------+-----------------------+
-| Python Type           | CUDA C++ Type         | Format                |
-+=======================+=======================+=======================+
-| ``bool``              | ``bool``              | A boolean (either     |
-|                       |                       | ``True`` or           |
-|                       |                       | ``False``).           |
-+-----------------------+-----------------------+-----------------------+
-| ``int``               | `                     | A 32-bit signed       |
-|                       | `cuda::std::int32_t`` | integer whose values  |
-|                       |                       | exist on the interval |
-|                       |                       | [−2,147,483,648,      |
-|                       |                       | +2,147,483,647].      |
-+-----------------------+-----------------------+-----------------------+
-| ``float``             | ``c                   | IEEE 754              |
-|                       | uda::std::float32_t`` | single-precision      |
-|                       |                       | (32-bit) binary       |
-|                       |                       | floating-point number |
-|                       |                       | (see IEEE 754-2019).  |
-+-----------------------+-----------------------+-----------------------+
-| ``complex``           | ``cud                 | Single-precision      |
-|                       | a::std::complex<  cud | (64-bit) complex      |
-|                       | a::std::float32_t >`` | floating-point number |
-|                       |                       | whose real and        |
-|                       |                       | imaginary components  |
-|                       |                       | must be IEEE 754      |
-|                       |                       | single-precision      |
-|                       |                       | (32-bit) binary       |
-|                       |                       | floating-point        |
-|                       |                       | numbers (see IEEE     |
-|                       |                       | 754-2019).            |
-+-----------------------+-----------------------+-----------------------+
++-------------+----------------------------------+------------------------------------------+
+| Python Type | CUDA C++ Type                    | Format                                   |
++=============+==================================+==========================================+
+| ``bool``    | ``bool``                         | A boolean (either ``True`` or            |
+|             |                                  | ``False``).                              |
++-------------+----------------------------------+------------------------------------------+
+| ``int``     | ``cuda::std::int32_t``           | A 32-bit signed integer whose values     |
+|             |                                  | exist on the interval [−2,147,483,648,   |
+|             |                                  | +2,147,483,647].                         |
++-------------+----------------------------------+------------------------------------------+
+| ``float``   | ``cuda::std::float32_t``         | IEEE 754 single-precision (32-bit)       |
+|             |                                  | binary floating-point number (see IEEE   |
+|             |                                  | 754-2019).                               |
++-------------+----------------------------------+------------------------------------------+
+| ``complex`` | ::                               | Single-precision (64-bit) complex        |
+|             |                                  | floating-point number whose real and     |
+|             |    cuda::std::complex<           | imaginary components must be IEEE 754    |
+|             |      cuda::std::float32_t        | single-precision (32-bit) binary         |
+|             |    >                             | floating-point numbers (see IEEE         |
+|             |                                  | 754-2019).                               |
++-------------+----------------------------------+------------------------------------------+
 
 In device code, if the value of a builtin number cannot be represented
 by its corresponding format, the behavior is undefined.
@@ -84,97 +74,65 @@ The following fixed-format number types shall be defined, and when they
 appear in a call to an interoperable function, they shall have the same
 machine representation as the corresponding CUDA C++ types:
 
-+-----------------------+-----------------------+-----------------------+
-| Python Type           | CUDA C++ Type         | Format                |
-+=======================+=======================+=======================+
-| ``int8``              | ``cuda::std::int8_t`` | An 8-bit signed       |
-|                       |                       | integer whose values  |
-|                       |                       | exist on the interval |
-|                       |                       | [-128, +127].         |
-+-----------------------+-----------------------+-----------------------+
-| ``int16``             | `                     | A 16-bit signed       |
-|                       | `cuda::std::int16_t`` | integer whose values  |
-|                       |                       | exist on the interval |
-|                       |                       | [−32,768, +32,767].   |
-+-----------------------+-----------------------+-----------------------+
-| ``int32``             | `                     | A 32-bit signed       |
-|                       | `cuda::std::int32_t`` | integer whose values  |
-|                       |                       | exist on the interval |
-|                       |                       | [−2,147,483,648,      |
-|                       |                       | +2,147,483,647].      |
-+-----------------------+-----------------------+-----------------------+
-| ``int64``             | `                     | A 64-bit signed       |
-|                       | `cuda::std::int64_t`` | integer whose values  |
-|                       |                       | exist on the interval |
-|                       |                       | [−9,223               |
-|                       |                       | ,372,036,854,775,808, |
-|                       |                       | +9,223,               |
-|                       |                       | 372,036,854,775,807]. |
-+-----------------------+-----------------------+-----------------------+
-| ``uint8``             | `                     | An 8-bit unsigned     |
-|                       | `cuda::std::uint8_t`` | integer whose values  |
-|                       |                       | exist on the interval |
-|                       |                       | [0, +255].            |
-+-----------------------+-----------------------+-----------------------+
-| ``uint16``            | ``                    | A 16-bit unsigned     |
-|                       | cuda::std::uint16_t`` | integer whose values  |
-|                       |                       | exist on the interval |
-|                       |                       | [0, +65,535].         |
-+-----------------------+-----------------------+-----------------------+
-| ``uint32``            | ``                    | A 32-bit unsigned     |
-|                       | cuda::std::uint32_t`` | integer whose values  |
-|                       |                       | exist on the interval |
-|                       |                       | [0, +4,294,967,295].  |
-+-----------------------+-----------------------+-----------------------+
-| ``uint64``            | ``                    | A 64-bit unsigned     |
-|                       | cuda::std::uint64_t`` | integer whose values  |
-|                       |                       | exist on the interval |
-|                       |                       | [0,                   |
-|                       |                       | +18,446,              |
-|                       |                       | 744,073,709,551,615]. |
-+-----------------------+-----------------------+-----------------------+
-| ``float16``           | ``c                   | IEEE 754              |
-|                       | uda::std::float16_t`` | half-precision        |
-|                       |                       | (16-bit) binary       |
-|                       |                       | floating-point number |
-|                       |                       | (see IEEE 754-2019).  |
-+-----------------------+-----------------------+-----------------------+
-| ``float32``           | ``c                   | IEEE 754              |
-|                       | uda::std::float32_t`` | single-precision      |
-|                       |                       | (32-bit) binary       |
-|                       |                       | floating-point number |
-|                       |                       | (see IEEE 754-2019).  |
-+-----------------------+-----------------------+-----------------------+
-| ``float64``           | ``c                   | IEEE 754              |
-|                       | uda::std::float64_t`` | double-precision      |
-|                       |                       | (64-bit) binary       |
-|                       |                       | floating-point number |
-|                       |                       | (see IEEE 754-2019).  |
-+-----------------------+-----------------------+-----------------------+
-| ``complex64``         | ``cud                 | Single-precision      |
-|                       | a::std::complex<  cud | (64-bit) complex      |
-|                       | a::std::float32_t >`` | floating-point number |
-|                       |                       | whose real and        |
-|                       |                       | imaginary components  |
-|                       |                       | must be IEEE 754      |
-|                       |                       | single-precision      |
-|                       |                       | (32-bit) binary       |
-|                       |                       | floating-point        |
-|                       |                       | numbers (see IEEE     |
-|                       |                       | 754-2019).            |
-+-----------------------+-----------------------+-----------------------+
-| ``complex128``        | ``cud                 | Double-precision      |
-|                       | a::std::complex<  cud | (128-bit) complex     |
-|                       | a::std::float64_t >`` | floating-point number |
-|                       |                       | whose real and        |
-|                       |                       | imaginary components  |
-|                       |                       | must be IEEE 754      |
-|                       |                       | double-precision      |
-|                       |                       | (64-bit) binary       |
-|                       |                       | floating-point        |
-|                       |                       | numbers (see IEEE     |
-|                       |                       | 754-2019).            |
-+-----------------------+-----------------------+-----------------------+
++----------------+----------------------------------+------------------------------------------+
+| Python Type    | CUDA C++ Type                    | Format                                   |
++================+==================================+==========================================+
+| ``int8``       | ``cuda::std::int8_t``            | An 8-bit signed integer whose values     |
+|                |                                  | exist on the interval [-128, +127].      | 
++----------------+----------------------------------+------------------------------------------+
+| ``int16``      | ``cuda::std::int16_t``           | A 16-bit signed integer whose values     |
+|                |                                  | exist on the interval [−32,768,          |
+|                |                                  | +32,767].                                |
++----------------+----------------------------------+------------------------------------------+
+| ``int32``      | ``cuda::std::int32_t``           | A 32-bit signed integer whose values     |
+|                |                                  | exist on the interval [−2,147,483,648,   |
+|                |                                  | +2,147,483,647].                         |
++----------------+----------------------------------+------------------------------------------+
+| ``int64``      | ``cuda::std::int64_t``           | A 64-bit signed integer whose values     |
+|                |                                  | exist on the interval                    |
+|                |                                  | [−9,223,372,036,854,775,808,             |
+|                |                                  | +9,223,372,036,854,775,807].             |
++----------------+----------------------------------+------------------------------------------+
+| ``uint8``      | ``cuda::std::uint8_t``           | An 8-bit unsigned integer whose values   |
+|                |                                  | exist on the interval [0, +255].         |
++----------------+----------------------------------+------------------------------------------+
+| ``uint16``     | ``cuda::std::uint16_t``          | A 16-bit unsigned integer whose values   |
+|                |                                  | exist on the interval [0, +65,535].      |
++----------------+----------------------------------+------------------------------------------+
+| ``uint32``     | ``cuda::std::uint32_t``          | A 32-bit unsigned integer whose values   |
+|                |                                  | exist on the interval [0,                |
+|                |                                  | +4,294,967,295].                         |
++----------------+----------------------------------+------------------------------------------+
+| ``uint64``     | ``cuda::std::uint64_t``          | A 64-bit unsigned integer whose values   |
+|                |                                  | exist on the interval [0,                |
+|                |                                  | +18,446,744,073,709,551,615].            |
++----------------+----------------------------------+------------------------------------------+
+| ``float16``    | ``cuda::std::float16_t``         | IEEE 754 half-precision (16-bit) binary  |
+|                |                                  | floating-point number (see IEEE          |
+|                |                                  | 754-2019).                               |
++----------------+----------------------------------+------------------------------------------+
+| ``float32``    | ``cuda::std::float32_t``         | IEEE 754 single-precision (32-bit)       |
+|                |                                  | binary floating-point number (see IEEE   |
+|                |                                  | 754-2019).                               |
++----------------+----------------------------------+------------------------------------------+
+| ``float64``    | ``cuda::std::float64_t``         | IEEE 754 double-precision (64-bit)       |
+|                |                                  | binary floating-point number (see IEEE   |
+|                |                                  | 754-2019).                               |
++----------------+----------------------------------+------------------------------------------+
+| ``complex64``  | ::                               | Single-precision (64-bit) complex        |
+|                |                                  | floating-point number whose real and     |
+|                |    cuda::std::complex<           | imaginary components must be IEEE 754    |
+|                |      cuda::std::float32_t        | single-precision (32-bit) binary         |
+|                |    >                             | floating-point numbers (see IEEE         |
+|                |                                  | 754-2019).                               |
++----------------+----------------------------------+------------------------------------------+
+| ``complex128`` | ::                               | Double-precision (128-bit) complex       |
+|                |                                  | floating-point number whose real and     |
+|                |    cuda::std::complex<           | imaginary components must be IEEE 754    |
+|                |      cuda::std::float64_t        | double-precision (64-bit) binary         |
+|                |    >                             | floating-point numbers (see IEEE         |
+|                |                                  | 754-2019).                               |
++----------------+----------------------------------+------------------------------------------+
 
 The following fixed-format types shall be defined in device code, and
 may be defined in host code; if they are not, the types are not
@@ -182,22 +140,22 @@ heterogeneous. When they appear in a call to an interoperable function,
 they shall have the same machine representation as the corresponding
 CUDA C++ types:
 
-+-----------------------+-----------------------+-----------------------+
-| ``float8e4m3``        | ``__nv_fp8_e4m3``     | 8-bit floating-point  |
-|                       |                       | number with 1 sign    |
-|                       |                       | bit, 4 exponent bits, |
-|                       |                       | and 3 mantissa bits.  |
-+=======================+=======================+=======================+
-| ``float8e5m2``        | ``__nv_fp8_e5m2``     | 8-bit floating-point  |
-|                       |                       | number with 1 sign    |
-|                       |                       | bit, 5 exponent bits, |
-|                       |                       | and 2 mantissa bits.  |
-+-----------------------+-----------------------+-----------------------+
-| ``bfloat16``          | ``cu                  | 16-bit floating-point |
-|                       | da::std::bfloat16_t`` | number with 1 sign    |
-|                       |                       | bit, 8 exponent bits, |
-|                       |                       | and 7 mantissa bits.  |
-+-----------------------+-----------------------+-----------------------+
+
++----------------+----------------------------------+------------------------------------------+
+| Python Type    | CUDA C++ Type                    | Format                                   |
++================+==================================+==========================================+
+| ``float8e4m3`` | ``__nv_fp8_e4m3``                | 8-bit floating-point number with 1 sign  |
+|                |                                  | bit, 4 exponent bits, and 3 mantissa     |
+|                |                                  | bits.                                    |
++----------------+----------------------------------+------------------------------------------+
+| ``float8e5m2`` | ``__nv_fp8_e5m2``                | 8-bit floating-point number with 1 sign  |
+|                |                                  | bit, 5 exponent bits, and 2 mantissa     |
+|                |                                  | bits.                                    |
++----------------+----------------------------------+------------------------------------------+
+| ``bfloat16``   | ``cuda::std::bfloat16_t``        | 16-bit floating-point number with 1      |
+|                |                                  | sign bit, 8 exponent bits, and 7         |
+|                |                                  | mantissa bits.                           |
++----------------+----------------------------------+------------------------------------------+
 
 If the value of a fixed-format number cannot be represented by its
 corresponding format, the behavior is undefined.
@@ -322,13 +280,17 @@ v2023.12 <https://data-apis.org/array-api/2023.12/API_specification/type_promoti
 Tuples
 ~~~~~~
 
-+-----------------------------------+-----------------------------------+
-| ``(8, 8, 8)``                     | ``struct __ano                    |
-|                                   | nymous_tuple_0 {   cuda::std::int |
-|                                   | 32_t __0;   cuda::std::int32_t __ |
-|                                   | 1;   cuda::std::int32_t __2; };`` |
-+===================================+===================================+
-+-----------------------------------+-----------------------------------+
++---------------+----------------------------------+
+| Python        | CUDA C++                         |
++===============+==================================+
+| ::            | ::                               |
+|               |                                  |
+|     (8, 8, 8) |     struct __anonymous_tuple_0 { |
+|               |       cuda::std::int32_t __0;    |
+|               |       cuda::std::int32_t __1;    |
+|               |       cuda::std::int32_t __2;    |
+|               |     };                           |
++---------------+----------------------------------+
 
 A *heterogeneous tuple* is a tuple of heterogeneous elements.
 
@@ -346,29 +308,53 @@ layout could be challenging for frameworks.
 User-Defined Types
 ~~~~~~~~~~~~~~~~~~
 
-+-----------------------------------+-----------------------------------+
-| ``@device.struct class point:     | ``struct point {   cuda::st       |
-|    x: int     y: int     z: int`` | d::int32_t x;   cuda::std::int32_ |
-|                                   | t y;   cuda::std::int32_t z; };`` |
-+===================================+===================================+
-| ``@device                         | ``struct alignas(16) comple       |
-| .struct(align=16) class complex:  | x {   cuda::std::float32_t real;  |
-|     real: float     imag: float`` |   cuda::std::float32_t imag; };`` |
-+-----------------------------------+-----------------------------------+
-| ``@device.st                      |                                   |
-| ruct class ticket_mutex:     line |                                   |
-| : device.Atomic(int, align=16)    |                                   |
-|   current: device.Atomic(int, ali |                                   |
-| gn=16)     @device.func     def l |                                   |
-| ock(self):         my = self.line |                                   |
-| .add(1)         while True:       |                                   |
-|      now = self.current.load()    |                                   |
-|         if (now == my) break      |                                   |
-|       self.current.wait(now)      |                                   |
-| @device.func      def unlock(self |                                   |
-| ):         self.current.add(1)    |                                   |
-|       self.current.notify_all()`` |                                   |
-+-----------------------------------+-----------------------------------+
++--------------------+-----------------------------+
+| Python             | CUDA C++                    |
++====================+=============================+
+| ::                 | ::                          |
+|                    |                             |
+|     @device.struct |     struct point {          |
+|     class point:   |       cuda::std::int32_t x; |
+|       x: int       |       cuda::std::int32_t y; |
+|       y: int       |       cuda::std::int32_t z; |
+|       z: int       |     };                      |
++--------------------+-----------------------------+
+
++------------------------------+----------------------------------+
+| Python                       | CUDA C++                         |
++==============================+==================================+
+| ::                           | ::                               |
+|                              |                                  |
+|     @device.struct(align=16) |     struct alignas(16) complex { |
+|     class complex:           |       cuda::std::float32_t real; |
+|       real: float            |       cuda::std::float32_t imag; |
+|       imag: float            |     };                           |
++------------------------------+----------------------------------+
+
++---------------------------------------------+--------------------------------------+
+| Python                                      | CUDA C++                             |
++=============================================+======================================+
+| ::                                          | ::                                   |
+|                                             |                                      |
+|     @device.struct class ticket_mutex:      |     struct ticket_mutex {            |
+|       line: device.Atomic(int, align=16)    |       cuda::atomic<int32_t> line;    |
+|       current: device.Atomic(int, align=16) |       cuda::atomic<int32_t> current; |
+|                                             |                                      |
+|       @device.func                          |       __device__ void lock() {       |
+|       def lock(self):                       |         auto my = line.fetch_add(1); |
+|         my = self.line.add(1)               |         while (true) {               |
+|         while True:                         |           auto now = current.load(); |
+|           now = self.current.load()         |           if (now == my) break;      |
+|           if (now == my) break              |           current.wait(now);         |
+|           self.current.wait(now)            |         }                            |
+|                                             |       }                              |
+|       @device.func                          |                                      |
+|       def unlock(self):                     |       __device__ void unlock() {     |
+|         self.current.add(1)                 |         current.fetch_add(1);        |
+|         self.current.notify_all()           |         current.notify_all();        |
+|                                             |       }                              |
+|                                             |     };                               |
++---------------------------------------------+--------------------------------------+
 
 A class decorated with ``@struct`` is a *heterogeneous struct type*,
 which is a heterogeneous type. An instance of such a class is a
@@ -480,4 +466,4 @@ where:
 
 Note: ``cuda::std::mdspan`` is not used as the machine representation as
 it does not have a specified layout in memory and discovering that
-layout could be challenging for frameworks. 
+layout could be challenging for frameworks.
