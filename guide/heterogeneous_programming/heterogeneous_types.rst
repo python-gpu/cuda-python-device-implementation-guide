@@ -467,3 +467,15 @@ where:
 Note: ``cuda::std::mdspan`` is not used as the machine representation as
 it does not have a specified layout in memory and discovering that
 layout could be challenging for frameworks.
+
+``Shape`` Type Hint
+^^^^^^^^^^^^^^^^^^^
+
+.. code:: py
+
+   Shape = tuple[int32, int32, int32] \
+        | tuple[int32, int32] \
+        | tuple[int32] \
+        | int32
+
+A type hint for parameters describing the shape of an array or a level in the thread hierarchy.

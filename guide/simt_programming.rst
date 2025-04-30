@@ -9,7 +9,6 @@ and blocks.
    :maxdepth: 2
 
    simt_programming/device_only_entities
-   simt_programming/dim3like
    simt_programming/kernel_functions
    simt_programming/thread_positioning
    simt_programming/memory
