@@ -2,19 +2,19 @@ Target Specialization
 ---------------------
 
 +---------------------------------------+-----------------------------------+
-| .. code-block:: py                    | .. code-block:: cu                |
+| ::                                    | ::                                |
 |                                       |                                   |
 |    if target(is_host):                |    #if !__CUDA_ARCH__             |
 |      substatement                     |      substatement                 |
 |                                       |    #endif                         |
 +---------------------------------------+-----------------------------------+
-| .. code-block:: py                    | .. code-block:: cu                |
+| ::                                    | ::                                |
 |                                       |                                   |
 |    if target(is_device):              |    #if __CUDA_ARCH__              |
 |      substatement                     |      substatement                 |
 |                                       |    #endif                         |
 +---------------------------------------+-----------------------------------+
-| .. code-block:: py                    | .. code-block:: cu                |
+| ::                                    | ::                                |
 |                                       |                                   |
 |    if target(is_exactly(smXX)         |    #if  __CUDA_ARCH__ == XX0 \    |
 |            | is_exactly(smYY)         |      || __CUDA_ARCH__ == YY0 \    |
@@ -22,25 +22,25 @@ Target Specialization
 |      substatement                     |      substatement                 |
 |                                       |    #endif                         |
 +---------------------------------------+-----------------------------------+
-| .. code-block:: py                    | .. code-block:: cu                |
+| ::                                    | ::                                |
 |                                       |                                   |
 |    if target(not provides(smXX)):     |    #if __CUDA_ARCH__ < XX0        |
 |      substatement                     |      substatement                 |
 |                                       |    #endif                         |
 +---------------------------------------+-----------------------------------+
-| .. code-block:: py                    | .. code-block:: cu                |
+| ::                                    | ::                                |
 |                                       |                                   |
 |    if target(not provides(smXX)       |    #if __CUDA_ARCH__ <= XX0       |
 |            | is_exactly(smXX)):       |      substatement                 |
 |      substatement                     |    #endif                         |
 +---------------------------------------+-----------------------------------+
-| .. code-block:: py                    | .. code-block:: cu                |
+| ::                                    | ::                                |
 |                                       |                                   |
 |    if target(provides(smXX)           |    #if __CUDA_ARCH__ > XX0        |
 |            & ~is_exactly(smXX)):      |      substatement                 |
 |      substatement                     |    #endif                         |
 +---------------------------------------+-----------------------------------+
-| .. code-block:: py                    | .. code-block:: cu                |
+| ::                                    | ::                                |
 |                                       |                                   |
 |    if target(provides(smXX)):         |    #if __CUDA_ARCH__ >= XX0       |
 |      substatement                     |      substatement                 |
