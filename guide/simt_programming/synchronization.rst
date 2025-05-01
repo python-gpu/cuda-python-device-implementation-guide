@@ -58,22 +58,30 @@ the above values. [User Requirement]
 Atomics
 ~~~~~~~
 
-.. autoclass:: api.atomic_interface.AtomicInterface
+.. currentmodule:: api.atomic_interface
+
+.. autoclass:: AtomicInterface
    :members:
    :undoc-members:
    :special-members: __init__
 
-.. autoclass:: api.atomic.Atomic
+.. currentmodule:: api.atomic
+
+.. autoclass:: Atomic
    :members:
    :undoc-members:
    :special-members: __init__
 
-.. autoclass:: api.atomic_ref.AtomicRef
+.. currentmodule:: api.atomic_ref
+
+.. autoclass:: AtomicRef
    :members:
    :undoc-members:
    :special-members: __init__
 
-.. autofunction:: api.atomic_interface.threadfence 
+.. currentmodule:: api.atomic_interface
+
+.. autofunction:: threadfence
 
 Thread Block Synchronization
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -84,13 +92,15 @@ block. [User Requirement]
 ``predicate`` parameters shall be a function that is callable with no
 arguments. [User Requirement]
 
-.. autofunction:: api.synchronization.syncthreads
+.. currentmodule:: api.synchronization
 
-.. autofunction:: api.synchronization.syncthreads_count
+.. autofunction:: syncthreads
 
-.. autofunction:: api.synchronization.syncthreads_and
+.. autofunction:: syncthreads_count
 
-.. autofunction:: api.synchronization.syncthreads_or
+.. autofunction:: syncthreads_and
+
+.. autofunction:: syncthreads_or
 
 Thread Warp Synchronization
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -98,36 +108,36 @@ Thread Warp Synchronization
 ``predicate`` parameters shall be a function that is callable with no
 arguments. [User Requirement]
 
-.. autoclass:: api.synchronization.WarpMask
+.. autoclass:: WarpMask
    :members:
    :undoc-members:
    :special-members: __getitem__, __setitem__
 
-.. autofunction:: api.synchronization.activemask
+.. autofunction:: activemask
 
-.. autofunction:: api.synchronization.lanemask_lt
+.. autofunction:: lanemask_lt
 
-.. autofunction:: api.synchronization.syncwarp
+.. autofunction:: syncwarp
 
-.. autofunction:: api.synchronization.all_sync
+.. autofunction:: all_sync
 
-.. autofunction:: api.synchronization.any_sync
+.. autofunction:: any_sync
 
-.. autofunction:: api.synchronization.eq_sync
+.. autofunction:: eq_sync
 
-.. autofunction:: api.synchronization.ballot_sync
+.. autofunction:: ballot_sync
 
-.. autofunction:: api.synchronization.shfl_sync
+.. autofunction:: shfl_sync
 
-.. autofunction:: api.synchronization.shfl_up_sync
+.. autofunction:: shfl_up_sync
 
-.. autofunction:: api.synchronization.shfl_down_sync
+.. autofunction:: shfl_down_sync
 
-.. autofunction:: api.synchronization.shfl_xor_sync
+.. autofunction:: shfl_xor_sync
 
-.. autofunction:: api.synchronization.match_any_sync
+.. autofunction:: match_any_sync
 
-.. autofunction:: api.synchronization.match_all_sync
+.. autofunction:: match_all_sync
 
 Numeric Intrinsics
 ~~~~~~~~~~~~~~~~~~

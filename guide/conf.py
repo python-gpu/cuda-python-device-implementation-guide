@@ -21,6 +21,11 @@ master_doc = 'index'
 templates_path = ['_templates']
 exclude_patterns = []
 
+# -- autodoc configuration ----------------------------------------------------
+autodoc_typehints = "none"
+add_module_names = False
+python_use_unqualified_type_names = True
+
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 html_theme = 'nvidia_sphinx_theme'
