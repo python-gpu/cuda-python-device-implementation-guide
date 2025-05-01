@@ -95,4 +95,4 @@ has one. [User Requirement]
 entities.
 
 Exposition only entities are not part of the interface and shall not be
-used. [User Requirement]
+used. [User Requirement] 

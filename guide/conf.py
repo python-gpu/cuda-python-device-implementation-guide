@@ -17,7 +17,7 @@ extensions = [
     'myst_parser'  # for markdown support
 ]
 
-master_doc = 'introduction'
+master_doc = 'index'
 templates_path = ['_templates']
 exclude_patterns = []
 
