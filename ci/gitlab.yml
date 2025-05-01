@@ -1,0 +1,27 @@
+image: python:3.10-slim
+
+stages:
+  - build
+  - deploy
+
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.pip-cache"
+
+# Cache dependencies to speed up builds
+cache:
+  paths:
+    - .pip-cache/
+
+# Build the documentation
+pages:
+  stage: deploy
+  script:
+    - apt-get update && apt-get install -y make
+    - pip install -r requirements.txt
+    - make html
+    - mv build/html/ public/
+  artifacts:
+    paths:
+      - public
+  only:
+    - main  # Only deploy when changes are pushed to the main branch 
