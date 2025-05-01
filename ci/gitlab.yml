@@ -5,7 +5,6 @@ pages:
   tags:
     - pages
   script: 
-    - python get-pip.py
     - python -m pip install -r requirements.txt
     - make html
     - mv build/html/ public/
