@@ -1,4 +1,4 @@
-image: gitlab-master.nvidia.com:5005/hwinf-scm/pages-runner:doxygen
+image: gitlab-master.nvidia.com:5005/hwinf-scm/pages-runner
 
 pages:
   stage: deploy
