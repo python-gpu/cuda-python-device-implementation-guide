@@ -1,4 +1,4 @@
-image: python:3.10-slim
+image: gitlab-master.nvidia.com:5005/hwinf-scm/pages-runner:doxygen
 
 stages:
   - build
