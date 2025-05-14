@@ -35,3 +35,8 @@ sys.path.insert(0, os.path.dirname(__file__))
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 html_baseurl = "https://andy.terrel.us/cuda-python-device-implementation-guide/"
+
+html_static_path = ['cuda-python-device-implementation-guide/_static']
+html_css_files = [
+            'cuda-python-device-implementation-guide/_static/custom.css',
+            ]
