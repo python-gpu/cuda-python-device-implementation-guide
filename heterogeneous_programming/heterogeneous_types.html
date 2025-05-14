@@ -1,0 +1,1097 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Heterogeneous Types and Objects &#8212; CUDA Python Device Implementation Guide</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/nvidia-sphinx-theme.css?v=df3ac72c" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'heterogeneous_programming/heterogeneous_types';</script>
+    <link rel="icon" href="../_static/favicon.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Target Specialization" href="target_specialization.html" />
+    <link rel="prev" title="Heterogeneous Functions" href="heterogeneous_functions.html" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+
+
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/nvidia-logo-horiz-rgb-blk-for-screen.svg" class="logo__image only-light" alt="CUDA Python Device Implementation Guide - Home"/>
+    <img src="../_static/nvidia-logo-horiz-rgb-wht-for-screen.svg" class="logo__image only-dark pst-js-only" alt="CUDA Python Device Implementation Guide - Home"/>
+  
+  
+    <p class="title logo__title">CUDA Python Device Implementation Guide</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/nvidia-logo-horiz-rgb-blk-for-screen.svg" class="logo__image only-light" alt="CUDA Python Device Implementation Guide - Home"/>
+    <img src="../_static/nvidia-logo-horiz-rgb-wht-for-screen.svg" class="logo__image only-dark pst-js-only" alt="CUDA Python Device Implementation Guide - Home"/>
+  
+  
+    <p class="title logo__title">CUDA Python Device Implementation Guide</p>
+  
+</a>
+
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Table of Contents">
+  <p class="bd-links__title" role="heading" aria-level="1">Table of Contents</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python_and_cuda_cpp.html">Python and CUDA C++</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../heterogeneous_programming.html">Heterogeneous Programming</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="constant_expressions.html">Constant Expressions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="execution_spaces.html">Execution Spaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="heterogeneous_functions.html">Heterogeneous Functions</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Heterogeneous Types and Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="target_specialization.html">Target Specialization</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../simt_programming.html">SIMT Programming</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../simt_programming/device_only_entities.html">Device Only Entities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../simt_programming/kernel_functions.html">Kernel Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../simt_programming/thread_positioning.html">Thread Positioning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../simt_programming/memory.html">Local, Shared, and Const Memory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../simt_programming/synchronization.html">Synchronization</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../heterogeneous_programming.html" class="nav-link">Heterogeneous Programming</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Heterogeneous Types and Objects</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="heterogeneous-types-and-objects">
+<h1>Heterogeneous Types and Objects<a class="headerlink" href="#heterogeneous-types-and-objects" title="Link to this heading">#</a></h1>
+<p><em>Heterogeneous types</em> are types whose execution space includes host code
+and device code. Note: Not all instances of a heterogeneous type are
+usable in both host code and device code.</p>
+<p><em>Heterogeneous objects</em> are objects of a heterogeneous type whose
+execution space includes both host code and device code.</p>
+<p>Attributes and methods cannot be dynamically added in device code to the
+heterogeneous types or objects defined in this document. Implementations
+may define additional types and objects that support these operations.
+[User Requirement]</p>
+<section id="none">
+<h2><code class="docutils literal notranslate"><span class="pre">None</span></code><a class="headerlink" href="#none" title="Link to this heading">#</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">NoneType</span></code> is heterogeneous. The <code class="docutils literal notranslate"><span class="pre">None</span></code> object is heterogeneous.</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">NoneType</span></code> appears in a call to an interoperable function, it
+shall have the same machine representation as <code class="docutils literal notranslate"><span class="pre">void*</span></code> in CUDA C++.
+When None appears in a call to an interoperable function, it shall have
+the same machine representation as a CUDA C++ object of type <code class="docutils literal notranslate"><span class="pre">void*</span></code>
+with a value of <code class="docutils literal notranslate"><span class="pre">nullptr</span></code>.</p>
+</section>
+<section id="builtin-numbers">
+<h2>Builtin Numbers<a class="headerlink" href="#builtin-numbers" title="Link to this heading">#</a></h2>
+<p>The <em>builtin numeric types</em> <code class="docutils literal notranslate"><span class="pre">bool</span></code>, <code class="docutils literal notranslate"><span class="pre">int</span></code>, <code class="docutils literal notranslate"><span class="pre">float</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">complex</span></code> are heterogeneous. Literal objects of these types are
+heterogeneous.</p>
+<p>The builtin numeric types shall have the following formats in device
+code, and when they appear in a call to an interoperable function, they
+shall have the same machine representation as the corresponding CUDA C++
+types:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Python Type</p></th>
+<th class="head"><p>CUDA C++ Type</p></th>
+<th class="head"><p>Format</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p></td>
+<td><p>A boolean (either <code class="docutils literal notranslate"><span class="pre">True</span></code> or
+<code class="docutils literal notranslate"><span class="pre">False</span></code>).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">cuda::std::int32_t</span></code></p></td>
+<td><p>A 32-bit signed integer whose values
+exist on the interval [−2,147,483,648,
++2,147,483,647].</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">cuda::std::float32_t</span></code></p></td>
+<td><p>IEEE 754 single-precision (32-bit)
+binary floating-point number (see IEEE
+754-2019).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">complex</span></code></p></td>
+<td><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cuda</span><span class="p">::</span><span class="n">std</span><span class="p">::</span><span class="nb">complex</span><span class="o">&lt;</span>
+  <span class="n">cuda</span><span class="p">::</span><span class="n">std</span><span class="p">::</span><span class="n">float32_t</span>
+<span class="o">&gt;</span>
+</pre></div>
+</div>
+</td>
+<td><p>Single-precision (64-bit) complex
+floating-point number whose real and
+imaginary components must be IEEE 754
+single-precision (32-bit) binary
+floating-point numbers (see IEEE
+754-2019).</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>In device code, if the value of a builtin number cannot be represented
+by its corresponding format, the behavior is undefined.</p>
+</section>
+<section id="fixed-format-numbers">
+<h2>Fixed-Format Numbers<a class="headerlink" href="#fixed-format-numbers" title="Link to this heading">#</a></h2>
+<p><em>Fixed-format numbers</em> represent a single number stored in a specific
+machine format. They are heterogeneous.</p>
+<p>Fixed-format numbers behave as if they are zero dimensional arrays. They
+have the same attributes and methods as heterogeneous Python arrays.</p>
+<p>The following fixed-format number types shall be defined, and when they
+appear in a call to an interoperable function, they shall have the same
+machine representation as the corresponding CUDA C++ types:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Python Type</p></th>
+<th class="head"><p>CUDA C++ Type</p></th>
+<th class="head"><p>Format</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">int8</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">cuda::std::int8_t</span></code></p></td>
+<td><p>An 8-bit signed integer whose values
+exist on the interval [-128, +127].</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">int16</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">cuda::std::int16_t</span></code></p></td>
+<td><p>A 16-bit signed integer whose values
+exist on the interval [−32,768,
++32,767].</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">int32</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">cuda::std::int32_t</span></code></p></td>
+<td><p>A 32-bit signed integer whose values
+exist on the interval [−2,147,483,648,
++2,147,483,647].</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">int64</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">cuda::std::int64_t</span></code></p></td>
+<td><p>A 64-bit signed integer whose values
+exist on the interval
+[−9,223,372,036,854,775,808,
++9,223,372,036,854,775,807].</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">uint8</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">cuda::std::uint8_t</span></code></p></td>
+<td><p>An 8-bit unsigned integer whose values
+exist on the interval [0, +255].</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">uint16</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">cuda::std::uint16_t</span></code></p></td>
+<td><p>A 16-bit unsigned integer whose values
+exist on the interval [0, +65,535].</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">uint32</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">cuda::std::uint32_t</span></code></p></td>
+<td><p>A 32-bit unsigned integer whose values
+exist on the interval [0,
++4,294,967,295].</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">uint64</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">cuda::std::uint64_t</span></code></p></td>
+<td><p>A 64-bit unsigned integer whose values
+exist on the interval [0,
++18,446,744,073,709,551,615].</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">float16</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">cuda::std::float16_t</span></code></p></td>
+<td><p>IEEE 754 half-precision (16-bit) binary
+floating-point number (see IEEE
+754-2019).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">float32</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">cuda::std::float32_t</span></code></p></td>
+<td><p>IEEE 754 single-precision (32-bit)
+binary floating-point number (see IEEE
+754-2019).</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">float64</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">cuda::std::float64_t</span></code></p></td>
+<td><p>IEEE 754 double-precision (64-bit)
+binary floating-point number (see IEEE
+754-2019).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">complex64</span></code></p></td>
+<td><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cuda</span><span class="p">::</span><span class="n">std</span><span class="p">::</span><span class="nb">complex</span><span class="o">&lt;</span>
+  <span class="n">cuda</span><span class="p">::</span><span class="n">std</span><span class="p">::</span><span class="n">float32_t</span>
+<span class="o">&gt;</span>
+</pre></div>
+</div>
+</td>
+<td><p>Single-precision (64-bit) complex
+floating-point number whose real and
+imaginary components must be IEEE 754
+single-precision (32-bit) binary
+floating-point numbers (see IEEE
+754-2019).</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">complex128</span></code></p></td>
+<td><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cuda</span><span class="p">::</span><span class="n">std</span><span class="p">::</span><span class="nb">complex</span><span class="o">&lt;</span>
+  <span class="n">cuda</span><span class="p">::</span><span class="n">std</span><span class="p">::</span><span class="n">float64_t</span>
+<span class="o">&gt;</span>
+</pre></div>
+</div>
+</td>
+<td><p>Double-precision (128-bit) complex
+floating-point number whose real and
+imaginary components must be IEEE 754
+double-precision (64-bit) binary
+floating-point numbers (see IEEE
+754-2019).</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The following fixed-format types shall be defined in device code, and
+may be defined in host code; if they are not, the types are not
+heterogeneous. When they appear in a call to an interoperable function,
+they shall have the same machine representation as the corresponding
+CUDA C++ types:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Python Type</p></th>
+<th class="head"><p>CUDA C++ Type</p></th>
+<th class="head"><p>Format</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">float8e4m3</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">__nv_fp8_e4m3</span></code></p></td>
+<td><p>8-bit floating-point number with 1 sign
+bit, 4 exponent bits, and 3 mantissa
+bits.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">float8e5m2</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">__nv_fp8_e5m2</span></code></p></td>
+<td><p>8-bit floating-point number with 1 sign
+bit, 5 exponent bits, and 2 mantissa
+bits.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">bfloat16</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">cuda::std::bfloat16_t</span></code></p></td>
+<td><p>16-bit floating-point number with 1
+sign bit, 8 exponent bits, and 7
+mantissa bits.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>If the value of a fixed-format number cannot be represented by its
+corresponding format, the behavior is undefined.</p>
+</section>
+<section id="vectors">
+<h2>Vectors<a class="headerlink" href="#vectors" title="Link to this heading">#</a></h2>
+<section id="vector-interface">
+<h3><code class="docutils literal notranslate"><span class="pre">Vector</span></code> Interface<a class="headerlink" href="#vector-interface" title="Link to this heading">#</a></h3>
+<p><em>Vectors</em> are collections of 1, 2, 3, or 4 objects of a single
+heterogeneous type.</p>
+<p>Vectors shall be immutable; any operation that modifies one shall return
+a new object. Note: This is the same semantics as builtin numbers.</p>
+</section>
+<section id="vector-size-int32-and-vector-len-int32-attribute">
+<h3><code class="docutils literal notranslate"><span class="pre">Vector.size:</span> <span class="pre">int32</span></code> and <code class="docutils literal notranslate"><span class="pre">Vector.__len__:</span> <span class="pre">int32</span></code> Attribute<a class="headerlink" href="#vector-size-int32-and-vector-len-int32-attribute" title="Link to this heading">#</a></h3>
+<p>The number of elements in the vector.</p>
+</section>
+<section id="vector-dtype-attribute">
+<h3><code class="docutils literal notranslate"><span class="pre">Vector.dtype</span></code> Attribute<a class="headerlink" href="#vector-dtype-attribute" title="Link to this heading">#</a></h3>
+<p>The <a class="reference external" href="https://data-apis.org/array-api/2023.12/API_specification/type_promotion.html">Python Array API Standard
+v2023.12</a>
+data type of the vector’s elements.</p>
+</section>
+<section id="vector-init-self-args-function">
+<h3><code class="docutils literal notranslate"><span class="pre">Vector.__init__(self,</span> <span class="pre">*args)</span></code> Function<a class="headerlink" href="#vector-init-self-args-function" title="Link to this heading">#</a></h3>
+<p>Initializes the vector’s elements with <code class="docutils literal notranslate"><span class="pre">args</span></code>.</p>
+<p>An object of type <code class="docutils literal notranslate"><span class="pre">self.dtype</span></code> shall be constructible from each of the
+args. [User Requirement]</p>
+<p><code class="docutils literal notranslate"><span class="pre">len(args)</span> <span class="pre">==</span> <span class="pre">len(self.size)</span></code>. [User Requirement]</p>
+</section>
+<section id="vector-getitem-self-i-int32-bool-function">
+<h3><code class="docutils literal notranslate"><span class="pre">Vector.__getitem__(self,</span> <span class="pre">i:</span> <span class="pre">int32)</span> <span class="pre">-&gt;</span> <span class="pre">bool</span></code> Function<a class="headerlink" href="#vector-getitem-self-i-int32-bool-function" title="Link to this heading">#</a></h3>
+<p>Returns the <code class="docutils literal notranslate"><span class="pre">i</span></code>th element of the vector.</p>
+<p><code class="docutils literal notranslate"><span class="pre">i</span> <span class="pre">&lt;</span> <span class="pre">self.size</span></code> [User Requirement]</p>
+</section>
+<section id="vector-setitem-self-i-int32-val-function">
+<h3><code class="docutils literal notranslate"><span class="pre">Vector.__setitem__(self,</span> <span class="pre">i:</span> <span class="pre">int32,</span> <span class="pre">val)</span></code> Function<a class="headerlink" href="#vector-setitem-self-i-int32-val-function" title="Link to this heading">#</a></h3>
+<p>Assign <code class="docutils literal notranslate"><span class="pre">val</span></code> to the <code class="docutils literal notranslate"><span class="pre">i</span></code>th element of the vector.</p>
+<p>val shall be assignable to an object of <code class="docutils literal notranslate"><span class="pre">self.dtype</span></code>. [User
+Requirement]</p>
+<p><code class="docutils literal notranslate"><span class="pre">i</span> <span class="pre">&lt;</span> <span class="pre">self.size</span></code> [User Requirement]</p>
+<p><code class="docutils literal notranslate"><span class="pre">Vector.__iter__(self)</span></code> Function</p>
+<p>Returns an iterator to the elements of the vector.</p>
+</section>
+<section id="vector-x-attribute">
+<h3><code class="docutils literal notranslate"><span class="pre">Vector.x</span></code> Attribute<a class="headerlink" href="#vector-x-attribute" title="Link to this heading">#</a></h3>
+<p>The first element of the vector.</p>
+</section>
+<section id="vector-y-attribute">
+<h3><code class="docutils literal notranslate"><span class="pre">Vector.y</span></code> Attribute<a class="headerlink" href="#vector-y-attribute" title="Link to this heading">#</a></h3>
+<p>The second element of the vector.</p>
+<p>This attribute shall only be defined if <code class="docutils literal notranslate"><span class="pre">self.size</span> <span class="pre">&gt;</span> <span class="pre">1</span></code>.</p>
+</section>
+<section id="vector-z-attribute">
+<h3><code class="docutils literal notranslate"><span class="pre">Vector.z</span></code> Attribute<a class="headerlink" href="#vector-z-attribute" title="Link to this heading">#</a></h3>
+<p>The third element of the vector.</p>
+<p>This attribute shall only be defined if <code class="docutils literal notranslate"><span class="pre">self.size</span> <span class="pre">&gt;</span> <span class="pre">2</span></code>.</p>
+</section>
+<section id="vector-w-attribute">
+<h3><code class="docutils literal notranslate"><span class="pre">Vector.w</span></code> Attribute<a class="headerlink" href="#vector-w-attribute" title="Link to this heading">#</a></h3>
+<p>The fourth element of the vector.</p>
+<p>This attribute shall only be defined if <code class="docutils literal notranslate"><span class="pre">self.size</span> <span class="pre">&gt;</span> <span class="pre">3</span></code>.</p>
+</section>
+<section id="vector-types">
+<h3>Vector Types<a class="headerlink" href="#vector-types" title="Link to this heading">#</a></h3>
+<p>The following vector types shall be defined for <em>N</em> = 1, <em>N</em> = 2, <em>N</em> =
+3, <em>N</em> = 4, and when they appear in a call to an interoperable function,
+they shall have the same machine representation as the corresponding
+CUDA C++ types:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Python Type</p></th>
+<th class="head"><p>CUDA C++ Type</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">int8xN</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">charN</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">int16xN</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">shortN</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">int32xN</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">intN</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">int64xN</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">longlongN</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">uint8xN</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ucharN</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">uint16xN</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ushortN</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">uint32xN</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">uintN</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">uint64xN</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ulonglongN</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">float8e4m3xN</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">__nv_fp8xN_e4m3</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">float8e5m2xN</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">__nv_fp8xN_e5m2</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">float16xN</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">__halfN</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">bfloat16xN</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">__nvbfloat16N</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">float32xN</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">floatN</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">float64xN</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">doubleN</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="numeric-promotion">
+<h2>Numeric Promotion<a class="headerlink" href="#numeric-promotion" title="Link to this heading">#</a></h2>
+<p>When performing arithmetic operations on two or more builtin numbers,
+fixed-format numbers, and/or arrays, the type of the resulting object
+shall be determined by the type promotion rules defined in the <a class="reference external" href="https://data-apis.org/array-api/2023.12/API_specification/type_promotion.html">Python
+Array API Standard
+v2023.12</a>.</p>
+</section>
+<section id="tuples">
+<h2>Tuples<a class="headerlink" href="#tuples" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Python</p></th>
+<th class="head"><p>CUDA C++</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+</pre></div>
+</div>
+</td>
+<td><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">struct</span> <span class="n">__anonymous_tuple_0</span> <span class="p">{</span>
+  <span class="n">cuda</span><span class="p">::</span><span class="n">std</span><span class="p">::</span><span class="n">int32_t</span> <span class="n">__0</span><span class="p">;</span>
+  <span class="n">cuda</span><span class="p">::</span><span class="n">std</span><span class="p">::</span><span class="n">int32_t</span> <span class="n">__1</span><span class="p">;</span>
+  <span class="n">cuda</span><span class="p">::</span><span class="n">std</span><span class="p">::</span><span class="n">int32_t</span> <span class="n">__2</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>A <em>heterogeneous tuple</em> is a tuple of heterogeneous elements.</p>
+<p>When a heterogeneous tuple appears in a call to an interoperable
+function, it shall have the same machine representation as a CUDA C++
+standard layout class with a public data member corresponding to each
+element of the tuple ordered from first to last. Each such data member
+shall have the machine representation that it would have if it was a
+stand alone object.</p>
+<p>Note: <code class="docutils literal notranslate"><span class="pre">cuda::std::tuple</span></code> is not used as the machine representation as
+it does not have a specified layout in memory and discovering that
+layout could be challenging for frameworks.</p>
+</section>
+<section id="user-defined-types">
+<h2>User-Defined Types<a class="headerlink" href="#user-defined-types" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Python</p></th>
+<th class="head"><p>CUDA C++</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@device</span><span class="o">.</span><span class="n">struct</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">point</span><span class="p">:</span>
+  <span class="n">x</span><span class="p">:</span> <span class="nb">int</span>
+  <span class="n">y</span><span class="p">:</span> <span class="nb">int</span>
+  <span class="n">z</span><span class="p">:</span> <span class="nb">int</span>
+</pre></div>
+</div>
+</td>
+<td><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">struct</span> <span class="n">point</span> <span class="p">{</span>
+  <span class="n">cuda</span><span class="p">::</span><span class="n">std</span><span class="p">::</span><span class="n">int32_t</span> <span class="n">x</span><span class="p">;</span>
+  <span class="n">cuda</span><span class="p">::</span><span class="n">std</span><span class="p">::</span><span class="n">int32_t</span> <span class="n">y</span><span class="p">;</span>
+  <span class="n">cuda</span><span class="p">::</span><span class="n">std</span><span class="p">::</span><span class="n">int32_t</span> <span class="n">z</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Python</p></th>
+<th class="head"><p>CUDA C++</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@device</span><span class="o">.</span><span class="n">struct</span><span class="p">(</span><span class="n">align</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">complex</span><span class="p">:</span>
+  <span class="n">real</span><span class="p">:</span> <span class="nb">float</span>
+  <span class="n">imag</span><span class="p">:</span> <span class="nb">float</span>
+</pre></div>
+</div>
+</td>
+<td><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">struct</span> <span class="n">alignas</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span> <span class="nb">complex</span> <span class="p">{</span>
+  <span class="n">cuda</span><span class="p">::</span><span class="n">std</span><span class="p">::</span><span class="n">float32_t</span> <span class="n">real</span><span class="p">;</span>
+  <span class="n">cuda</span><span class="p">::</span><span class="n">std</span><span class="p">::</span><span class="n">float32_t</span> <span class="n">imag</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Python</p></th>
+<th class="head"><p>CUDA C++</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@device</span><span class="o">.</span><span class="n">struct</span> <span class="k">class</span><span class="w"> </span><span class="nc">ticket_mutex</span><span class="p">:</span>
+  <span class="n">line</span><span class="p">:</span> <span class="n">device</span><span class="o">.</span><span class="n">Atomic</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">align</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+  <span class="n">current</span><span class="p">:</span> <span class="n">device</span><span class="o">.</span><span class="n">Atomic</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">align</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+
+  <span class="nd">@device</span><span class="o">.</span><span class="n">func</span>
+  <span class="k">def</span><span class="w"> </span><span class="nf">lock</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="n">my</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">line</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+      <span class="n">now</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">now</span> <span class="o">==</span> <span class="n">my</span><span class="p">)</span> <span class="k">break</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">current</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="n">now</span><span class="p">)</span>
+
+  <span class="nd">@device</span><span class="o">.</span><span class="n">func</span>
+  <span class="k">def</span><span class="w"> </span><span class="nf">unlock</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">current</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">current</span><span class="o">.</span><span class="n">notify_all</span><span class="p">()</span>
+</pre></div>
+</div>
+</td>
+<td><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">struct</span> <span class="n">ticket_mutex</span> <span class="p">{</span>
+  <span class="n">cuda</span><span class="p">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="n">int32_t</span><span class="o">&gt;</span> <span class="n">line</span><span class="p">;</span>
+  <span class="n">cuda</span><span class="p">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="n">int32_t</span><span class="o">&gt;</span> <span class="n">current</span><span class="p">;</span>
+
+  <span class="n">__device__</span> <span class="n">void</span> <span class="n">lock</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">auto</span> <span class="n">my</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">fetch_add</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">true</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">auto</span> <span class="n">now</span> <span class="o">=</span> <span class="n">current</span><span class="o">.</span><span class="n">load</span><span class="p">();</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">now</span> <span class="o">==</span> <span class="n">my</span><span class="p">)</span> <span class="k">break</span><span class="p">;</span>
+      <span class="n">current</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="n">now</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="n">__device__</span> <span class="n">void</span> <span class="n">unlock</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">current</span><span class="o">.</span><span class="n">fetch_add</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+    <span class="n">current</span><span class="o">.</span><span class="n">notify_all</span><span class="p">();</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>A class decorated with <code class="docutils literal notranslate"><span class="pre">&#64;struct</span></code> is a <em>heterogeneous struct type</em>,
+which is a heterogeneous type. An instance of such a class is a
+<em>heterogeneous struct</em>.</p>
+<p>Each attribute of a heterogeneous struct shall have a type hint that is
+heterogeneous. When a heterogeneous struct migrates to the device, the
+attribute’s type shall match the type hint. [User Requirement]</p>
+<p>Attributes shall not be dynamically added to a heterogeneous struct.
+[User Requirement]</p>
+<p>Heterogeneous structs shall be immutable; any operation that modifies
+one shall return a new object. Note: This is the same semantics as
+builtin numbers.</p>
+<p>When a heterogeneous struct appears in a call to an interoperable
+function, it shall have the same machine representation as a CUDA C++
+standard layout class with a public data member corresponding to each
+attribute of the heterogeneous struct ordered as they lexically appear
+in Python. Each such data member shall have the machine representation
+that it would have if it was a stand alone object.</p>
+<section id="struct-and-struct-align-int-class-decorator">
+<h3><code class="docutils literal notranslate"><span class="pre">&#64;struct</span></code> and <code class="docutils literal notranslate"><span class="pre">&#64;struct(align:</span> <span class="pre">int)</span></code> Class Decorator<a class="headerlink" href="#struct-and-struct-align-int-class-decorator" title="Link to this heading">#</a></h3>
+<p>If <code class="docutils literal notranslate"><span class="pre">&#64;struct</span></code> is used without arguments, the heterogeneous struct will
+have default alignment. If <code class="docutils literal notranslate"><span class="pre">&#64;struct</span></code> is used with an <code class="docutils literal notranslate"><span class="pre">align</span></code>
+argument, the heterogeneous struct shall be aligned to at least that
+many bytes.</p>
+<p><code class="docutils literal notranslate"><span class="pre">&#64;struct</span></code> returns a type that has an <code class="docutils literal notranslate"><span class="pre">underlying</span></code> attribute that
+produces the class that was decorated.</p>
+</section>
+<section id="align-t-type-n-int-type-function">
+<h3><code class="docutils literal notranslate"><span class="pre">align(t:</span> <span class="pre">type,</span> <span class="pre">n:</span> <span class="pre">int)</span> <span class="pre">-&gt;</span> <span class="pre">type</span></code> Function<a class="headerlink" href="#align-t-type-n-int-type-function" title="Link to this heading">#</a></h3>
+<p>Returns a new type that is equivalent to <code class="docutils literal notranslate"><span class="pre">t</span></code> and is aligned to at
+least <code class="docutils literal notranslate"><span class="pre">n</span></code> bytes.</p>
+</section>
+</section>
+<section id="arrays">
+<h2>Arrays<a class="headerlink" href="#arrays" title="Link to this heading">#</a></h2>
+<p>A <em>heterogeneous array</em> is a tensor of heterogeneous objects.</p>
+<p>A heterogeneous array shall implement the <a class="reference external" href="https://data-apis.org/array-api/2023.12/API_specification/type_promotion.html">Python Array API Standard
+v2023.12</a>
+in host code and the following subset of said API in device code:</p>
+<ul class="simple">
+<li><p>Indexing.</p></li>
+<li><p>Slicing.</p></li>
+<li><p>Striding.</p></li>
+<li><p>Reading attributes whose type is a heterogeneous Python type.
+Example: <code class="docutils literal notranslate"><span class="pre">.dtype</span></code>, <code class="docutils literal notranslate"><span class="pre">.shape</span></code>, <code class="docutils literal notranslate"><span class="pre">.strides</span></code>, <code class="docutils literal notranslate"><span class="pre">.size,</span> <span class="pre">and</span></code>
+<code class="docutils literal notranslate"><span class="pre">.ndims</span></code> can be read in device code, but <code class="docutils literal notranslate"><span class="pre">.flags</span></code> cannot because
+it is not a heterogeneous Python type.</p></li>
+<li><p>Calls to <code class="docutils literal notranslate"><span class="pre">view</span></code>.</p></li>
+<li><p>Calls to <code class="docutils literal notranslate"><span class="pre">reshape</span></code> that do not allocate.</p></li>
+<li><p>Calls to <code class="docutils literal notranslate"><span class="pre">astype</span></code> with copy=False that do not allocate.</p></li>
+</ul>
+<p>A heterogeneous array shall support the following data types:</p>
+<ul class="simple">
+<li><p>The data types for the Builtin Numbers and Fixed Format Numbers
+defined in this document.</p></li>
+<li><p><a class="reference external" href="https://numpy.org/devdocs/user/basics.rec.html#structured-arrays">NumPy Structured Data
+Types</a>
+that are compositions of the data types mentioned above.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&#64;struct</span></code> classes.</p></li>
+</ul>
+<p>A heterogeneous array shall implement either the <a class="reference external" href="https://dmlc.github.io/dlpack/latest/python_spec.html">DLPack Python
+Specification</a>
+or the <a class="reference external" href="https://numba.readthedocs.io/en/stable/cuda/cuda_array_interface.html">CUDA Array Interface Version
+3</a>.
+Note: This explicit opt-in prevents arrays from accidentally being
+treated as heterogeneous. [User Requirement]</p>
+<p>If a heterogeneous array implements both the DLPack Specification and
+the CUDA Array Interface, the DLPack Specification shall be used.</p>
+<p>When a heterogeneous array <code class="docutils literal notranslate"><span class="pre">x</span></code> appears in a call to an interoperable
+function, it shall have the same machine representation as the following
+CUDA C++ type:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">template</span><span class="w"> </span><span class="o">&lt;</span><span class="n">typename</span><span class="w"> </span><span class="n">dtype</span><span class="p">,</span><span class="w"> </span><span class="n">cuda</span><span class="o">::</span><span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">ndim</span><span class="o">&gt;</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">cuda</span><span class="o">::</span><span class="n">interoperable_array_descriptor</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">dtype</span><span class="o">*</span><span class="w"> </span><span class="n">data</span><span class="p">;</span>
+<span class="w">  </span><span class="n">cuda</span><span class="o">::</span><span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">shape</span><span class="p">[</span><span class="n">ndim</span><span class="p">];</span>
+<span class="w">  </span><span class="n">cuda</span><span class="o">::</span><span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">strides</span><span class="p">[</span><span class="n">ndim</span><span class="p">];</span>
+
+<span class="w">  </span><span class="n">template</span><span class="w"> </span><span class="o">&lt;</span><span class="n">typename</span><span class="w"> </span><span class="n">mdspan</span><span class="o">&gt;</span>
+<span class="w">  </span><span class="n">interoperable_array_descriptor</span><span class="p">(</span><span class="n">mdspan</span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">ms</span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">operator</span><span class="w"> </span><span class="nf">auto</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">cuda</span><span class="o">::</span><span class="n">std</span><span class="o">::</span><span class="n">mdspan</span><span class="p">{</span><span class="n">data</span><span class="p">,</span>
+<span class="w">      </span><span class="n">cuda</span><span class="o">::</span><span class="n">std</span><span class="o">::</span><span class="n">layout_stride</span><span class="o">::</span><span class="n">mapping</span><span class="p">{</span><span class="n">cuda</span><span class="o">::</span><span class="n">std</span><span class="o">::</span><span class="n">dims</span><span class="o">&lt;</span><span class="n">ndim</span><span class="o">&gt;</span><span class="p">(</span><span class="n">shape</span><span class="p">),</span><span class="w"> </span><span class="n">strides</span><span class="p">}};</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>where:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">dtype</span></code> is the machine representation of <code class="docutils literal notranslate"><span class="pre">x.dtype</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ndim</span></code> is <code class="docutils literal notranslate"><span class="pre">x.ndim</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">data</span></code> is <code class="docutils literal notranslate"><span class="pre">x.data</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">size</span></code> is <code class="docutils literal notranslate"><span class="pre">x.size</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">shape</span></code> is <code class="docutils literal notranslate"><span class="pre">x.shape</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">strides</span></code> is <code class="docutils literal notranslate"><span class="pre">x.strides</span></code>.</p></li>
+</ul>
+<p>Note: <code class="docutils literal notranslate"><span class="pre">cuda::std::mdspan</span></code> is not used as the machine representation as
+it does not have a specified layout in memory and discovering that
+layout could be challenging for frameworks.</p>
+<section id="shape-type-hint">
+<h3><code class="docutils literal notranslate"><span class="pre">Shape</span></code> Type Hint<a class="headerlink" href="#shape-type-hint" title="Link to this heading">#</a></h3>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="n">Shape</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">int32</span><span class="p">,</span> <span class="n">int32</span><span class="p">,</span> <span class="n">int32</span><span class="p">]</span> \
+     <span class="o">|</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">int32</span><span class="p">,</span> <span class="n">int32</span><span class="p">]</span> \
+     <span class="o">|</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">int32</span><span class="p">]</span> \
+     <span class="o">|</span> <span class="n">int32</span>
+</pre></div>
+</div>
+<p>A type hint for parameters describing the shape of an array or a level in the thread hierarchy.</p>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="heterogeneous_functions.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Heterogeneous Functions</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="target_specialization.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Target Specialization</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+
+
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#none"><code class="docutils literal notranslate"><span class="pre">None</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#builtin-numbers">Builtin Numbers</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fixed-format-numbers">Fixed-Format Numbers</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#vectors">Vectors</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#vector-interface"><code class="docutils literal notranslate"><span class="pre">Vector</span></code> Interface</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#vector-size-int32-and-vector-len-int32-attribute"><code class="docutils literal notranslate"><span class="pre">Vector.size:</span> <span class="pre">int32</span></code> and <code class="docutils literal notranslate"><span class="pre">Vector.__len__:</span> <span class="pre">int32</span></code> Attribute</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#vector-dtype-attribute"><code class="docutils literal notranslate"><span class="pre">Vector.dtype</span></code> Attribute</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#vector-init-self-args-function"><code class="docutils literal notranslate"><span class="pre">Vector.__init__(self,</span> <span class="pre">*args)</span></code> Function</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#vector-getitem-self-i-int32-bool-function"><code class="docutils literal notranslate"><span class="pre">Vector.__getitem__(self,</span> <span class="pre">i:</span> <span class="pre">int32)</span> <span class="pre">-&gt;</span> <span class="pre">bool</span></code> Function</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#vector-setitem-self-i-int32-val-function"><code class="docutils literal notranslate"><span class="pre">Vector.__setitem__(self,</span> <span class="pre">i:</span> <span class="pre">int32,</span> <span class="pre">val)</span></code> Function</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#vector-x-attribute"><code class="docutils literal notranslate"><span class="pre">Vector.x</span></code> Attribute</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#vector-y-attribute"><code class="docutils literal notranslate"><span class="pre">Vector.y</span></code> Attribute</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#vector-z-attribute"><code class="docutils literal notranslate"><span class="pre">Vector.z</span></code> Attribute</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#vector-w-attribute"><code class="docutils literal notranslate"><span class="pre">Vector.w</span></code> Attribute</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#vector-types">Vector Types</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#numeric-promotion">Numeric Promotion</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tuples">Tuples</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user-defined-types">User-Defined Types</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#struct-and-struct-align-int-class-decorator"><code class="docutils literal notranslate"><span class="pre">@struct</span></code> and <code class="docutils literal notranslate"><span class="pre">@struct(align:</span> <span class="pre">int)</span></code> Class Decorator</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#align-t-type-n-int-type-function"><code class="docutils literal notranslate"><span class="pre">align(t:</span> <span class="pre">type,</span> <span class="pre">n:</span> <span class="pre">int)</span> <span class="pre">-&gt;</span> <span class="pre">type</span></code> Function</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#arrays">Arrays</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#shape-type-hint"><code class="docutils literal notranslate"><span class="pre">Shape</span></code> Type Hint</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+<a class="footer-brand logo" href="https://www.nvidia.com">
+  <img src="../_static/nvidia-logo-horiz-rgb-1c-blk-for-screen.svg" class="logo__image only-light" alt="NVIDIA"/>
+  <img src="../_static/nvidia-logo-horiz-rgb-1c-wht-for-screen.svg" class="logo__image only-dark" alt="NVIDIA"/>
+</a></div>
+      
+        <div class="footer-item">
+
+<div class="footer-links">
+  
+  
+  <a class="external" href="https://www.nvidia.com/en-us/about-nvidia/privacy-policy/">Privacy Policy</a>
+   | 
+  
+  
+  
+  <a class="external" href="https://www.nvidia.com/en-us/about-nvidia/privacy-center/">Manage My Privacy</a>
+   | 
+  
+  
+  
+  <a class="external" href="https://www.nvidia.com/en-us/preferences/start/">Do Not Sell or Share My Data</a>
+   | 
+  
+  
+  
+  <a class="external" href="https://www.nvidia.com/en-us/about-nvidia/terms-of-service/">Terms of Service</a>
+   | 
+  
+  
+  
+  <a class="external" href="https://www.nvidia.com/en-us/about-nvidia/accessibility/">Accessibility</a>
+   | 
+  
+  
+  
+  <a class="external" href="https://www.nvidia.com/en-us/about-nvidia/company-policies/">Corporate Policies</a>
+   | 
+  
+  
+  
+  <a class="external" href="https://www.nvidia.com/en-us/product-security/">Product Security</a>
+   | 
+  
+  
+  
+  <a class="external" href="https://www.nvidia.com/en-us/contact/">Contact</a>
+  
+  
+  
+</div>
+</div>
+      
+        <div class="footer-item">
+
+
+
+
+  <p class="copyright">
+    
+      Copyright © 2025, NVIDIA Corporation.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+  </body>
+</html>
