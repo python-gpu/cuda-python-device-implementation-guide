@@ -34,3 +34,4 @@ html_show_sphinx = False
 sys.path.insert(0, os.path.dirname(__file__))
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
+html_baseurl = "https://andy.terrel.us/cuda-python-device-implementation-guide/"
